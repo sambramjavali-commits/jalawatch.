@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Quality Reporting System | Village & Ward</title>
+    <style>
+        :root {
+            --navy: #082f49;
+            --blue: #087eaa;
+            --cyan: #16b8c8;
+            --pale: #eaf8fb;
+            --ink: #163344;
+            --muted: #66808d;
+            --line: #dcebef;
+            --white: #fff;
+            --green: #16845b;
+            --orange: #c47a16;
+            --red: #c44747;
+            --shadow: 0 14px 40px rgba(8, 47, 73, .09);
+            --radius: 20px
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+
+        body {
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+            background: #f5fafb;
+            color: var(--ink);
+            line-height: 1.55
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit
+        }
+
+        button,
+        a {
+            -webkit-tap-highlight-color: transparent
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit
+        }
+
+        .topbar {
+            background: var(--navy);
+            color: #d7f4f7;
+            font-size: 13px;
+            padding: 9px 5%;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap
+        }
+
+        .topbar span {
+            display: flex;
+            align-items: center;
+            gap: 7px
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: rgba(255, 255, 255, .94);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--line)
+        }
+
+        .nav-wrap {
+            max-width: 1200px;
+            margin: auto;
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            font-weight: 800;
+            color: var(--navy);
+            letter-spacing: -.4px
+        }
+
+        .brand-mark {
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            background: linear-gradient(145deg, var(--blue), var(--cyan));
+            display: grid;
+            place-items: center;
+            color: white;
+            font-size: 22px;
+            box-shadow: 0 7px 18px #16b8c844
+        }
+
+        .brand small {
+            display: block;
+            font-size: 10px;
+            color: var(--muted);
+            font-weight: 600;
+            letter-spacing: 1.2px;
+            text-transform: uppercase
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            flex-wrap: wrap
+        }
+
+        nav a {
+            font-size: 13px;
+            font-weight: 700;
+            color: #527080;
+            padding: 10px 13px;
+            border-radius: 11px
+        }
+
+        nav a:hover,
+        nav a.active {
+            background: var(--pale);
+            color: var(--blue)
+        }
+
+        .nav-cta {
+            background: var(--blue) !important;
+            color: white !important
+        }
+
+        .menu-btn {
+            display: none;
+            border: 0;
+            background: var(--pale);
+            border-radius: 10px;
+            padding: 9px 12px;
+            color: var(--navy);
+            font-size: 20px
+        }
+
+        main {
+            max-width: 1200px;
+            margin: auto;
+            padding: 28px 24px 60px
+        }
+
+        .hero {
+            position: relative;
+            overflow: hidden;
+            border-radius: 28px;
+            padding: 54px 52px;
+            min-height: 340px;
+            color: white;
+            background: linear-gradient(105deg, rgba(5, 43, 67, .96), rgba(4, 111, 145, .82)), url("https://images.unsplash.com/photo-1437482078695-73f5ca6c96e2?auto=format&fit=crop&w=1800&q=85") center/cover;
+            box-shadow: var(--shadow)
+        }
+
+        .hero:after {
+            content: "";
+            position: absolute;
+            width: 340px;
+            height: 340px;
+            border: 1px solid #ffffff25;
+            border-radius: 50%;
+            right: 7%;
+            top: -105px;
+            box-shadow: 0 0 0 35px #ffffff0b, 0 0 0 75px #ffffff08
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 650px
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #ffffff1c;
+            border: 1px solid #ffffff35;
+            border-radius: 30px;
+            padding: 7px 12px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.1px;
+            text-transform: uppercase
+        }
+
+        .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #62e4c0;
+            box-shadow: 0 0 0 4px #62e4c02b
+        }
+
+        .hero h1 {
+            font-size: clamp(32px, 5vw, 53px);
+            line-height: 1.08;
+            letter-spacing: -1.7px;
+            margin: 20px 0 14px;
+            max-width: 630px
+        }
+
+        .hero p {
+            font-size: 15px;
+            color: #d8edf3;
+            max-width: 550px
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 27px
+        }
+
+        .btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            border: 0;
+            border-radius: 12px;
+            padding: 12px 17px;
+            font-weight: 800;
+            font-size: 13px;
+            cursor: pointer;
+            transition: .2s
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.04)
+        }
+
+        .btn-primary {
+            background: var(--cyan);
+            color: #052d40;
+            box-shadow: 0 8px 20px #16b8c83b
+        }
+
+        .btn-light {
+            background: white;
+            color: var(--navy)
+        }
+
+        .btn-outline {
+            background: white;
+            border: 1px solid var(--line);
+            color: var(--ink)
+        }
+
+        .btn-small {
+            padding: 8px 11px;
+            font-size: 12px;
+            border-radius: 9px
+        }
+
+        .section {
+            margin-top: 34px;
+            scroll-margin-top: 100px
+        }
+
+        .section-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 15px;
+            margin-bottom: 17px;
+            flex-wrap: wrap
+        }
+
+        .kicker {
+            color: var(--blue);
+            font-size: 11px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1.4px
+        }
+
+        h2 {
+            font-size: 23px;
+            letter-spacing: -.6px;
+            color: var(--navy);
+            line-height: 1.2;
+            margin-top: 4px
+        }
+
+        .sub {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 5px
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px
+        }
+
+        .stat {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 19px;
+            box-shadow: 0 6px 20px #082f4907;
+            display: flex;
+            gap: 14px;
+            align-items: center
+        }
+
+        .stat-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            display: grid;
+            place-items: center;
+            font-size: 21px;
+            flex: none
+        }
+
+        .stat:nth-child(1) .stat-icon {
+            background: #e5f6fb
+        }
+
+        .stat:nth-child(2) .stat-icon {
+            background: #fff4df
+        }
+
+        .stat:nth-child(3) .stat-icon {
+            background: #e5f7ef
+        }
+
+        .stat:nth-child(4) .stat-icon {
+            background: #fceaea
+        }
+
+        .stat strong {
+            display: block;
+            font-size: 26px;
+            line-height: 1.1;
+            color: var(--navy)
+        }
+
+        .stat small {
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 650
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1.05fr .95fr;
+            gap: 18px
+        }
+
+        .panel {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 22px;
+            box-shadow: 0 7px 25px #082f4908
+        }
+
+        .ward-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px
+        }
+
+        .ward {
+            border: 1px solid var(--line);
+            border-radius: 15px;
+            padding: 15px 13px;
+            background: #fbfeff
+        }
+
+        .ward-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 6px
+        }
+
+        .ward h3 {
+            font-size: 14px;
+            color: var(--navy)
+        }
+
+        .status {
+            font-size: 10px;
+            font-weight: 850;
+            border-radius: 30px;
+            padding: 5px 8px;
+            white-space: nowrap
+        }
+
+        .good {
+            background: #e5f7ee;
+            color: var(--green)
+        }
+
+        .moderate {
+            background: #fff4df;
+            color: var(--orange)
+        }
+
+        .poor {
+            background: #fdeaea;
+            color: var(--red)
+        }
+
+        .ward p {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 10px
+        }
+
+        .ward .bar {
+            height: 6px;
+            border-radius: 10px;
+            background: #e9f0f2;
+            margin-top: 13px;
+            overflow: hidden
+        }
+
+        .ward .bar span {
+            height: 100%;
+            display: block;
+            border-radius: 10px;
+            background: var(--green)
+        }
+
+        .ward:nth-child(2) .bar span {
+            background: var(--orange)
+        }
+
+        .ward:nth-child(3) .bar span {
+            background: var(--red)
+        }
+
+        .note {
+            margin-top: 13px;
+            font-size: 11px;
+            color: var(--muted);
+            background: #f4fafb;
+            border-radius: 10px;
+            padding: 10px 12px
+        }
+
+        .quick-list {
+            display: grid;
+            gap: 12px
+        }
+
+        .quick-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start
+        }
+
+        .quick-icon {
+            width: 34px;
+            height: 34px;
+            display: grid;
+            place-items: center;
+            border-radius: 11px;
+            background: var(--pale);
+            flex: none
+        }
+
+        .quick-item strong {
+            display: block;
+            font-size: 13px;
+            color: var(--navy)
+        }
+
+        .quick-item p {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 2px
+        }
+
+        .form-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px
+        }
+
+        .field {
+            display: grid;
+            gap: 6px
+        }
+
+        .field.full {
+            grid-column: 1/-1
+        }
+
+        label {
+            font-size: 12px;
+            font-weight: 800;
+            color: #345565
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            border: 1px solid #d8e7eb;
+            border-radius: 11px;
+            padding: 12px 13px;
+            background: #fbfeff;
+            color: var(--ink);
+            outline: none;
+            font-size: 13px;
+            transition: .2s
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 3px #16b8c81a;
+            background: white
+        }
+
+        textarea {
+            min-height: 105px;
+            resize: vertical
+        }
+
+        .help {
+            font-size: 10px;
+            color: var(--muted)
+        }
+
+        .form-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 17px
+        }
+
+        .form-msg {
+            font-size: 12px;
+            color: var(--green);
+            font-weight: 700
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 9px;
+            flex-wrap: wrap
+        }
+
+        .toolbar input {
+            min-width: 210px;
+            max-width: 270px
+        }
+
+        .toolbar select {
+            width: auto;
+            min-width: 145px
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            border: 1px solid var(--line);
+            border-radius: 14px
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+            background: white
+        }
+
+        th {
+            background: #f0f8fa;
+            color: #527080;
+            text-transform: uppercase;
+            letter-spacing: .7px;
+            font-size: 10px;
+            text-align: left;
+            padding: 13px 14px
+        }
+
+        td {
+            padding: 13px 14px;
+            border-top: 1px solid #edf3f5;
+            font-size: 12px;
+            color: #345565
+        }
+
+        td strong {
+            color: var(--navy)
+        }
+
+        .empty {
+            text-align: center;
+            padding: 28px;
+            color: var(--muted)
+        }
+
+        .empty span {
+            font-size: 25px;
+            display: block;
+            margin-bottom: 5px
+        }
+
+        .table-status {
+            border-radius: 20px;
+            padding: 5px 9px;
+            font-size: 10px;
+            font-weight: 850;
+            background: #fff4df;
+            color: var(--orange)
+        }
+
+        .table-status.resolved {
+            background: #e5f7ee;
+            color: var(--green)
+        }
+
+        .action-btn {
+            border: 0;
+            background: #eef8fa;
+            color: var(--blue);
+            font-size: 11px;
+            font-weight: 800;
+            padding: 7px 9px;
+            border-radius: 8px;
+            cursor: pointer
+        }
+
+        footer {
+            background: var(--navy);
+            color: #d4e8ed;
+            margin-top: 15px
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: auto;
+            padding: 28px 24px;
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+            font-size: 12px
+        }
+
+        .footer-inner strong {
+            color: white
+        }
+
+        .toast {
+            position: fixed;
+            right: 22px;
+            bottom: 22px;
+            z-index: 50;
+            background: var(--navy);
+            color: white;
+            padding: 13px 17px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            font-size: 13px;
+            opacity: 0;
+            transform: translateY(12px);
+            pointer-events: none;
+            transition: .25s
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0)
+        }
+
+        @media(max-width:850px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr
+            }
+
+            .hero {
+                padding: 42px 30px
+            }
+
+            .nav-wrap {
+                flex-wrap: wrap
+            }
+
+            nav {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch
+            }
+
+            nav.open {
+                display: flex
+            }
+
+            nav a {
+                padding: 11px
+            }
+
+            .menu-btn {
+                display: block
+            }
+        }
+
+        @media(max-width:560px) {
+            main {
+                padding: 18px 14px 40px
+            }
+
+            .topbar {
+                padding: 8px 14px;
+                font-size: 11px
+            }
+
+            .nav-wrap {
+                padding: 12px 14px
+            }
+
+            .hero {
+                padding: 34px 22px;
+                border-radius: 21px;
+                min-height: 0
+            }
+
+            .hero h1 {
+                font-size: 34px
+            }
+
+            .stats {
+                gap: 9px
+            }
+
+            .stat {
+                padding: 13px;
+                gap: 9px
+            }
+
+            .stat-icon {
+                width: 38px;
+                height: 38px;
+                font-size: 18px
+            }
+
+            .stat strong {
+                font-size: 22px
+            }
+
+            .stat small {
+                font-size: 10px
+            }
+
+            .panel {
+                padding: 16px
+            }
+
+            .ward-grid {
+                grid-template-columns: 1fr
+            }
+
+            .form-layout {
+                grid-template-columns: 1fr
+            }
+
+            .field.full {
+                grid-column: auto
+            }
+
+            .toolbar {
+                width: 100%
+            }
+
+            .toolbar input,
+            .toolbar select {
+                max-width: none;
+                width: 100%
+            }
+
+            .section-head {
+                align-items: flex-start
+            }
+
+            .footer-inner {
+                padding: 24px 15px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="topbar">
+        <span>💧 Clean water, healthier communities</span>
+        <span>Village / Ward Community Portal</span>
+    </div>
+    <header>
+        <div class="nav-wrap">
+            <a class="brand" href="#home"><span class="brand-mark">💧</span><span>WATERWATCH<small>Village & Ward
+                        Portal</small></span></a>
+            <button class="menu-btn" id="menuBtn" aria-label="Open navigation">☰</button>
+            <nav id="mainNav">
+                <a href="#home" class="active">Home</a>
+                <a href="#dashboard">Dashboard</a>
+                <a href="#report">Report Issue</a>
+                <a href="#complaints">Complaints</a>
+                <a href="#report" class="nav-cta">Submit a Report ↗</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <span class="eyebrow"><i class="dot"></i> Community water monitoring</span>
+                <h1>Every drop matters.<br>Every voice counts.</h1>
+                <p>Help make your village or ward safer. Report water quality concerns, follow community complaints and
+                    stay informed about local water conditions.</p>
+                <div class="hero-actions">
+                    <a class="btn btn-primary" href="#report">＋ Report a water issue</a>
+                    <a class="btn btn-light" href="#dashboard">Explore dashboard ↓</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="dashboard">
+            <div class="section-head">
+                <div>
+                    <div class="kicker">Community overview</div>
+                    <h2>Water monitoring dashboard</h2>
+                    <p class="sub">A quick look at reports submitted through this portal.</p>
+                </div>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-icon">📋</div>
+                    <div><strong id="totalCount">0</strong><small>Total complaints</small></div>
+                </div>
+                <div class="stat">
+                    <div class="stat-icon">⏳</div>
+                    <div><strong id="pendingCount">0</strong><small>Pending reports</small></div>
+                </div>
+                <div class="stat">
+                    <div class="stat-icon">✅</div>
+                    <div><strong id="resolvedCount">0</strong><small>Resolved reports</small></div>
+                </div>
+                <div class="stat">
+                    <div class="stat-icon">🏘️</div>
+                    <div><strong id="wardCount">3</strong><small>Wards displayed</small></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section content-grid">
+            <div class="panel">
+                <div class="section-head">
+                    <div>
+                        <div class="kicker">Local overview</div>
+                        <h2>Water quality by ward</h2>
+                        <p class="sub">Illustrative sample status for the project demo.</p>
+                    </div>
+                </div>
+                <div class="ward-grid">
+                    <div class="ward">
+                        <div class="ward-top">
+                            <h3>Ward 1</h3><span class="status good">● Good</span>
+                        </div>
+                        <p>Water quality appears satisfactory.</p>
+                        <div class="bar"><span style="width:90%"></span></div>
+                    </div>
+                    <div class="ward">
+                        <div class="ward-top">
+                            <h3>Ward 2</h3><span class="status moderate">● Moderate</span>
+                        </div>
+                        <p>Further monitoring is recommended.</p>
+                        <div class="bar"><span style="width:58%"></span></div>
+                    </div>
+                    <div class="ward">
+                        <div class="ward-top">
+                            <h3>Ward 3</h3><span class="status poor">● Poor</span>
+                        </div>
+                        <p>Attention and water testing needed.</p>
+                        <div class="bar"><span style="width:28%"></span></div>
+                    </div>
+                </div>
+                <div class="note">ⓘ Sample demonstration data only. These labels are not live laboratory test results.
+                </div>
+            </div>
+            <div class="panel">
+                <div class="section-head">
+                    <div>
+                        <div class="kicker">How it works</div>
+                        <h2>Make your report count</h2>
+                        <p class="sub">A simple process for community members.</p>
+                    </div>
+                </div>
+                <div class="quick-list">
+                    <div class="quick-item"><span class="quick-icon">✍️</span>
+                        <div><strong>1. Share the issue</strong>
+                            <p>Enter your name, ward and the water problem you noticed.</p>
+                        </div>
+                    </div>
+                    <div class="quick-item"><span class="quick-icon">📨</span>
+                        <div><strong>2. Submit a complaint</strong>
+                            <p>Your report is added to the community complaint list.</p>
+                        </div>
+                    </div>
+                    <div class="quick-item"><span class="quick-icon">🔎</span>
+                        <div><strong>3. Track the status</strong>
+                            <p>Check whether a report is pending or marked resolved.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="report">
+            <div class="section-head">
+                <div>
+                    <div class="kicker">Raise your voice</div>
+                    <h2>Report a water quality issue</h2>
+                    <p class="sub">Please provide accurate details so the concern can be understood.</p>
+                </div>
+            </div>
+            <div class="panel">
+                <form id="reportForm">
+                    <div class="form-layout">
+                        <div class="field"><label for="name">Resident name *</label><input id="name" name="name"
+                                type="text" placeholder="Enter your full name" maxlength="70" required></div>
+                        <div class="field"><label for="ward">Village / Ward name *</label><input id="ward" name="ward"
+                                type="text" placeholder="e.g. Ward 1" maxlength="70" required></div>
+                        <div class="field"><label for="issue">Type of issue *</label><select id="issue" name="issue"
+                                required>
+                                <option value="">Select an issue</option>
+                                <option>Dirty Water</option>
+                                <option>Bad Smell</option>
+                                <option>Color Change</option>
+                                <option>Low Water Supply</option>
+                                <option>Suspected Contamination</option>
+                                <option>Other</option>
+                            </select></div>
+                        <div class="field"><label for="date">Date noticed *</label><input id="date" name="date"
+                                type="date" required></div>
+                        <div class="field full"><label for="description">Describe the issue *</label><textarea
+                                id="description" name="description"
+                                placeholder="Tell us what happened, where you noticed it and any other useful details..."
+                                maxlength="600" required></textarea><span class="help">Do not drink water that you
+                                suspect may be unsafe. Contact the appropriate local authority for urgent
+                                concerns.</span></div>
+                    </div>
+                    <div class="form-actions"><button class="btn btn-primary" type="submit">Submit report
+                            →</button><button class="btn btn-outline" type="reset">Clear form</button><span
+                            class="form-msg" id="formMessage" role="status"></span></div>
+                </form>
+            </div>
+        </section>
+
+        <section class="section" id="complaints">
+            <div class="section-head">
+                <div>
+                    <div class="kicker">Community reports</div>
+                    <h2>Reported complaints</h2>
+                    <p class="sub">Search reports and update their demo status.</p>
+                </div>
+                <div class="toolbar"><input type="search" id="searchInput" placeholder="Search name, ward or issue..."
+                        aria-label="Search complaints"><select id="statusFilter" aria-label="Filter by status">
+                        <option value="all">All statuses</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Resolved">Resolved</option>
+                    </select></div>
+            </div>
+            <div class="panel">
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Resident</th>
+                                <th>Village / Ward</th>
+                                <th>Issue</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="complaintTable"></tbody>
+                    </table>
+                    <div class="empty" id="emptyState"><span>🫧</span>No complaints yet. Be the first to report an
+                        issue.</div>
+                </div>
+                <p class="help" style="margin-top:12px">Demo note: reports are stored in this browser on this device
+                    using local storage. They are not sent to a government office or shared with other devices.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-inner">
+            <div><strong>💧 WATERWATCH</strong><br>Water Quality Reporting System for Village/Ward</div>
+            <div>Working together for safer water and healthier communities.<br>© 2026 Community Water Monitoring Portal
+            </div>
+        </div>
+    </footer>
+    <div class="toast" id="toast" role="status"></div>
+
+    <script>
+        "use strict";
+
+        const STORAGE_KEY = "waterwatch_village_ward_reports_v1";
+        const reportForm = document.getElementById("reportForm");
+        const complaintTable = document.getElementById("complaintTable");
+        const emptyState = document.getElementById("emptyState");
+        const searchInput = document.getElementById("searchInput");
+        const statusFilter = document.getElementById("statusFilter");
+        const toast = document.getElementById("toast");
+
+        let reports = loadReports();
+
+        function loadReports() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                return saved ? JSON.parse(saved) : [];
+            } catch (error) {
+                console.error("Could not read saved reports:", error);
+                return [];
+            }
+        }
+        function saveReports() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(reports));
+            } catch (error) {
+                showToast("Could not save data in this browser.");
+            }
+        }
+        function escapeHTML(value) {
+            return String(value).replace(/[&<>"']/g, character => ({
+                "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+            })[character]);
+        }
+        function showToast(message) {
+            toast.textContent = message;
+            toast.classList.add("show");
+            window.clearTimeout(showToast.timer);
+            showToast.timer = window.setTimeout(() => toast.classList.remove("show"), 2800);
+        }
+        function updateDashboard() {
+            const resolved = reports.filter(report => report.status === "Resolved").length;
+            document.getElementById("totalCount").textContent = reports.length;
+            document.getElementById("resolvedCount").textContent = resolved;
+            document.getElementById("pendingCount").textContent = reports.length - resolved;
+        }
+        function renderReports() {
+            const query = searchInput.value.trim().toLowerCase();
+            const selectedStatus = statusFilter.value;
+            const filtered = reports.filter(report => {
+                const matchesText = [report.name, report.ward, report.issue, report.description]
+                    .some(value => String(value || "").toLowerCase().includes(query));
+                const matchesStatus = selectedStatus === "all" || report.status === selectedStatus;
+                return matchesText && matchesStatus;
+            });
+
+            complaintTable.innerHTML = filtered.map(report => `
+    <tr>
+      <td><strong>${escapeHTML(report.name)}</strong></td>
+      <td>${escapeHTML(report.ward)}</td>
+      <td>${escapeHTML(report.issue)}</td>
+      <td>${escapeHTML(report.date)}</td>
+      <td><span class="table-status ${report.status === "Resolved" ? "resolved" : ""}">${escapeHTML(report.status)}</span></td>
+      <td><button class="action-btn" data-action="toggle" data-id="${escapeHTML(report.id)}">${report.status === "Resolved" ? "Reopen" : "Mark resolved"}</button></td>
+    </tr>
+  `).join("");
+
+            emptyState.style.display = filtered.length ? "none" : "block";
+            updateDashboard();
+        }
+
+        reportForm.addEventListener("submit", event => {
+            event.preventDefault();
+            if (!reportForm.reportValidity()) return;
+
+            const newReport = {
+                id: (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2),
+                name: document.getElementById("name").value.trim(),
+                ward: document.getElementById("ward").value.trim(),
+                issue: document.getElementById("issue").value,
+                date: document.getElementById("date").value,
+                description: document.getElementById("description").value.trim(),
+                status: "Pending"
+            };
+
+            if (!newReport.name || !newReport.ward || !newReport.issue || !newReport.date || !newReport.description) {
+                showToast("Please complete all required fields.");
+                return;
+            }
+
+            reports.unshift(newReport);
+            saveReports();
+            reportForm.reset();
+            document.getElementById("date").value = new Date().toISOString().slice(0, 10);
+            searchInput.value = "";
+            statusFilter.value = "all";
+            renderReports();
+            showToast("Your water issue report has been added.");
+            document.getElementById("complaints").scrollIntoView({ behavior: "smooth" });
+        });
+
+        complaintTable.addEventListener("click", event => {
+            const button = event.target.closest("button[data-action='toggle']");
+            if (!button) return;
+            const report = reports.find(item => item.id === button.dataset.id);
+            if (!report) return;
+            report.status = report.status === "Resolved" ? "Pending" : "Resolved";
+            saveReports();
+            renderReports();
+            showToast("Report status updated.");
+        });
+
+        searchInput.addEventListener("input", renderReports);
+        statusFilter.addEventListener("change", renderReports);
+
+        const dateInput = document.getElementById("date");
+        dateInput.max = new Date().toISOString().slice(0, 10);
+        dateInput.value = dateInput.max;
+
+        document.getElementById("menuBtn").addEventListener("click", () => {
+            document.getElementById("mainNav").classList.toggle("open");
+        });
+        document.querySelectorAll("#mainNav a").forEach(link => {
+            link.addEventListener("click", () => document.getElementById("mainNav").classList.remove("open"));
+        });
+
+        renderReports();
+    </script>
+</body>
+
+</html>
